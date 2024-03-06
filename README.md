@@ -44,7 +44,7 @@ You can read the authentication header from the headers of the request
 Authorization: Token jwt.token.here
 ```
 
-1. Authentication:
+### 1. Authentication:
 
 ```bash
 POST /api/users/login
@@ -64,7 +64,7 @@ Example request body:
 No authentication required, returns a User
 Required fields: email, password
 
-2. Registration:
+### 2. Registration:
 
 ```bash
 POST /api/users
@@ -85,7 +85,7 @@ Example request body:
 No authentication required, returns a User
 Required fields: email, username, password
 
-x. Get Tags
+### x. Get Tags
 
 ```bash
 GET /api/tags
