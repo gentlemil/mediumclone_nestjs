@@ -16,3 +16,9 @@
 
 #  setup typeorm
 #  tworzymy plik ormconfig.ts
+
+# dodawanie nowego recordu
+INSERT INTO table_name(col1, col2, ... (albo puste jesli wszystkie pola)) VALUES(col1_value, col2_value,...);
+
+# wyswietlanie recordow
+select * from tags
