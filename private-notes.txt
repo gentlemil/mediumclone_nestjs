@@ -9,5 +9,10 @@
 # \c mediumclone
 # grant all on schema public to mediumclone;
 
+# zeby sie polaczyc z baza danych uzywamy komendy:
+\c <nazwa bazy f.e. mediumclone>
+\dt (display table)
+\d tags (describe tags table)
+
 #  setup typeorm
 #  tworzymy plik ormconfig.ts
