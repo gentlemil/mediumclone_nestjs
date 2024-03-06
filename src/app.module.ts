@@ -3,10 +3,11 @@ import { AppController } from '@app/app.controller';
 import { AppService } from '@app/app.service';
 import { TagModule } from '@app/tag/tag.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
 import ormconfig from 'ormconfig';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(ormconfig), TagModule],
+  imports: [TypeOrmModule.forRoot(ormconfig), TagModule, UserModule],
   controllers: [AppController],
   providers: [AppService],
 })

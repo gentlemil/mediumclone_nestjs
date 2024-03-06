@@ -35,13 +35,65 @@ Nest is [MIT licensed](LICENSE).
 In progress...
 Until then for more information click here: https://realworld-docs.netlify.app/docs/intro
 
-## API Documentation
+## API Documentation - Endpoints
+
+Authentication Header:
+You can read the authentication header from the headers of the request
+
+```bash
+Authorization: Token jwt.token.here
+```
+
+1. Authentication:
+
+```bash
+POST /api/users/login
+```
+
+Example request body:
+
+```bash
+{
+  "user":{
+    "email": "jake@jake.jake",
+    "password": "jakejake"
+  }
+}
+```
+
+No authentication required, returns a User
+Required fields: email, password
+
+2. Registration:
+
+```bash
+POST /api/users
+```
+
+Example request body:
+
+```bash
+{
+  "user":{
+    "username": "Jacob",
+    "email": "jake@jake.jake",
+    "password": "jakejake"
+  }
+}
+```
+
+No authentication required, returns a User
+Required fields: email, username, password
+
+x. Get Tags
 
 ```bash
 GET /api/tags
 ```
 
-1. Tags - No authentication required, returns a List of Tags
+No authentication required, returns a List of Tags
+
+Response format:
 
 ```bash
 {
