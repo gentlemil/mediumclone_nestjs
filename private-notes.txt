@@ -1,0 +1,13 @@
+#  CREATING DATABASE AND USER
+# npm run start
+# sudo -u postgres psql
+# \l - sprawdza dostepne bazy danych
+# \du (display users)
+# create database <database_name e.g. mediumclone>; (PAMIETAJ O SREDNIKU!)
+# create user mediumclone with encrypted password 'adminadmin'; (PAMIETAJ O SREDNIKU!)
+# grant all privileges on database <database_name f.e. mediumclone> to <user_name f.e. mediumclone>;
+# \c mediumclone
+# grant all on schema public to mediumclone;
+
+#  setup typeorm
+#  tworzymy plik ormconfig.ts
