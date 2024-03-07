@@ -36,13 +36,18 @@ export class UserService {
     return await this.userRepository.save(newUser);
   }
 
+  async findById(id: number): Promise<UserEntity> {
+    return this.userRepository.findOne({
+      where: { id },
+    });
+  }
+
   async login(loginUserDto: LoginUserDto): Promise<UserEntity> {
     // check if exist user with email from request body
     const user = await this.userRepository.findOne({
       where: { email: loginUserDto.email },
       select: ['id', 'username', 'email', 'bio', 'image', 'password'],
     });
-    console.log(user);
 
     if (!user) {
       throw new HttpException(
