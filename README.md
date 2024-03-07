@@ -98,6 +98,40 @@ and example request response:
 No authentication required, returns a User
 Required fields: email, username, password
 
+and example request response:
+
+```bash
+{
+  "user": {
+    "email": "jake@jake.jake",
+    "token": "jwt.token.here",
+    "username": "jake",
+    "bio": "I work at statefarm",
+    "image": null
+  }
+}
+```
+
+**3. Authentication:**
+
+```bash
+POST /api/users/login
+```
+
+Example request body:
+
+```bash
+{
+  "user":{
+    "email": "jake@jake.jake",
+    "password": "jakejake"
+  }
+}
+```
+
+No authentication required, returns a User
+Required fields: email, password
+
 **x. Get Tags:**
 
 ```bash
