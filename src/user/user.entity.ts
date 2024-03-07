@@ -31,7 +31,11 @@ export class UserEntity {
   @Column({ default: '' })
   image: string;
 
-  @Column()
+  /**
+   * { select: false } means that when I send request for userEntity,
+   * password is not selected by default uless u say it explicity
+   */
+  @Column({ select: false })
   password: string;
 
   @BeforeInsert()

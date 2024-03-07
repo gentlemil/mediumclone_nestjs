@@ -40,7 +40,9 @@ export class UserService {
     // check if exist user with email from request body
     const user = await this.userRepository.findOne({
       where: { email: loginUserDto.email },
+      select: ['id', 'username', 'email', 'bio', 'image', 'password'],
     });
+    console.log(user);
 
     if (!user) {
       throw new HttpException(
@@ -63,6 +65,7 @@ export class UserService {
     }
 
     // if user exist and a password is corrent return user
+    delete user.password;
     return user;
   }
 
