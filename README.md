@@ -7,13 +7,7 @@
 
 <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
 
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
+## Installation and running the app
 
 ```bash
 
@@ -25,10 +19,6 @@ $ npm install
 $ npm run start
 
 ```
-
-## License
-
-Nest is [MIT licensed](LICENSE).
 
 ## Description
 
@@ -132,6 +122,63 @@ Example request body:
 No authentication required, returns a User
 Required fields: email, password
 
+**4. Update User:**
+
+```bash
+PUT /api/user
+```
+
+Example request body:
+
+```bash
+{
+  "user":{
+    "email": "jake@jake.jake",
+    "bio": "I like to skateboard",
+    "image": "https://i.stack.imgur.com/xHWG8.jpg"
+  }
+}
+```
+
+Authentication required, returns the User:
+
+```bash
+{
+  "user": {
+    "email": "jake@jake.jake",
+    "token": "jwt.token.here",
+    "username": "jake",
+    "bio": "I work at statefarm",
+    "image": null
+  }
+}
+```
+
+Accepted fields: email, username, password, image, bio
+
+**5. Get Profile:**
+
+```bash
+GET /api/profiles/:username
+```
+
+Authentication optional, returns a Profile:
+
+```bash
+{
+  "profile": {
+    "username": "jake",
+    "bio": "I work at statefarm",
+    "image": "https://api.realworld.io/images/smiley-cyrus.jpg",
+    "following": false
+  }
+}
+```
+
+**6. :**
+
+<!--  -->
+
 **x. Get Tags:**
 
 ```bash
@@ -150,3 +197,7 @@ Response format:
   ]
 }
 ```
+
+## License
+
+Nest is [MIT licensed](LICENSE).
