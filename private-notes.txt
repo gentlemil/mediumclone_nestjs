@@ -23,6 +23,6 @@ INSERT INTO table_name(col1, col2, ... (albo puste jesli wszystkie pola)) VALUES
 # wyswietlanie recordow
 select * from tags
 
-# przygotowanie do migracji i migracja
+# przygotowanie do migracji i migracja 
 npm run db:drop
 npm run db:create src/migrations/CreateTags (przykladowo)
