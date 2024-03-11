@@ -18,7 +18,6 @@ export class ArticleService {
     currentUser: UserEntity,
     createArticleDto: CreateArticleDto,
   ): Promise<ArticleEntity> {
-    console.log(currentUser, createArticleDto);
     const article = new ArticleEntity();
     Object.assign(article, createArticleDto);
     if (!article.tagList) {
@@ -29,6 +28,10 @@ export class ArticleService {
     article.author = currentUser;
 
     return await this.articleRepository.save(article);
+  }
+
+  async findBySlug(slug: string): Promise<ArticleEntity> {
+    return this.articleRepository.findOne({ where: { slug } });
   }
 
   buildArticleResponse(article: ArticleEntity): ArticleResponseInterface {
