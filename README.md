@@ -259,7 +259,25 @@ DELETE /api/articles/:slug
 
 Authentication required.
 
-**9. :**
+**9. Update Article:**
+
+```bash
+PUT /api/articles/:slug
+```
+
+Example request body:
+
+```bash
+{
+  "article": {
+    "title": "Did you train your dragon?"
+  }
+}
+```
+
+Authentication required, returns the updated Article
+All fields required
+
 **10. :**
 **11. :**
 
