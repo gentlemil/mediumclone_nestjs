@@ -65,6 +65,6 @@ export class ArticleEntity {
   }
 
   // many articles belongs to one user
-  @ManyToOne(() => UserEntity, (user) => user.articles)
+  @ManyToOne(() => UserEntity, (user) => user.articles, { eager: true })
   author: UserEntity;
 }

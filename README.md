@@ -251,7 +251,14 @@ No authentication required, will return single article:
 }
 ```
 
-**8. :**
+**8. Delete Article:**
+
+```bash
+DELETE /api/articles/:slug
+```
+
+Authentication required.
+
 **9. :**
 **10. :**
 **11. :**
