@@ -11,8 +11,11 @@ import { ArticlesResponseInterface } from './types/articlesResponse.interface';
 @Injectable()
 export class ArticleService {
   constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(ArticleEntity)
     private readonly articleRepository: Repository<ArticleEntity>,
+
     private dataSource: DataSource,
   ) {}
 
@@ -25,8 +28,39 @@ export class ArticleService {
       .createQueryBuilder('articles')
       .leftJoinAndSelect('articles.author', 'author');
 
-    const articles = await queryBuilding.getMany();
+    // find feeds by tag
+    if (query.tag) {
+      queryBuilding.andWhere('articles.tagList LIKE :tag', {
+        tag: `%${query.tag}%`,
+      });
+    }
+
+    // find articles by author
+    if (query.author) {
+      const author = await this.userRepository.findOne({
+        where: { username: query.author },
+      });
+      queryBuilding.andWhere('articles.authorId = :id', {
+        id: author.id,
+      });
+    }
+
+    // display articles from the newest
+    queryBuilding.orderBy('articles.createdAt', 'DESC');
+
     const articlesCount = await queryBuilding.getCount();
+
+    // set how many elements provide per page
+    if (query.limit) {
+      queryBuilding.limit(query.limit);
+    }
+
+    // set how mamy elements skip (page)
+    if (query.offset) {
+      queryBuilding.offset(query.offset);
+    }
+
+    const articles = await queryBuilding.getMany();
 
     return { articles, articlesCount };
   }

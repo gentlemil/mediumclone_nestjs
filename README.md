@@ -175,7 +175,7 @@ Authentication optional, returns a Profile:
 }
 ```
 
-**6. Create Article :**
+**6. Create Article:**
 
 ```bash
 POST /api/articles
@@ -278,14 +278,33 @@ Example request body:
 Authentication required, returns the updated Article
 All fields required
 
-**10. :**
+**10. List Articles (get all):**
+
+```bash
+GET /api/articles
+```
+
+Returns most recent articles globally by default, provide tag, author or favorited query parameter to filter results
+
+Query Parameters:
+
+````bash
+Filter by tag: `?tag=AngularJS`
+Filter by author: `?author=jake`
+Favorited by user: `?favorited=jake`
+Limit number of articles (default is 20): `?limit=20`
+Offset/skip number of articles (default is 0): `?offset=0`
+```bash
+
+Authentication optional, will return multiple articles, ordered by most recent first
+
 **11. :**
 
 **x. Get Tags:**
 
 ```bash
 GET /api/tags
-```
+````
 
 No authentication required, returns a List of Tags
 
