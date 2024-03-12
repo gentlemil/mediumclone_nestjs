@@ -294,11 +294,27 @@ Filter by author: `?author=jake`
 Favorited by user: `?favorited=jake`
 Limit number of articles (default is 20): `?limit=20`
 Offset/skip number of articles (default is 0): `?offset=0`
-```bash
+```
 
 Authentication optional, will return multiple articles, ordered by most recent first
 
-**11. :**
+**11. Favorite Article:**
+```bash
+POST /api/articles/:slug/favorite
+```
+
+Authentication required, returns the Article
+No additional parameters required
+
+**12. Unfavorite Article:**
+```bash
+DELETE /api/articles/:slug/favorite
+bash
+
+Authentication required, returns the Article
+No additional parameters required
+
+**13. :**
 
 **x. Get Tags:**
 
