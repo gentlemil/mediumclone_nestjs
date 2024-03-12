@@ -77,9 +77,27 @@ export class ArticleService {
       queryBuilder.offset(query.offset);
     }
 
+    // add favourite prop into our article (depends on who is logged)
+    let favouriteIds: number[] = [];
+
+    if (currentUserId) {
+      const currentUser = await this.userRepository.findOne({
+        where: { id: currentUserId },
+        relations: ['favourites'],
+      });
+
+      favouriteIds = currentUser.favourites.map((favourite) => favourite.id);
+    }
+
     const articles = await queryBuilder.getMany();
 
-    return { articles, articlesCount };
+    const articlesWithFavourites = articles.map((article) => {
+      const favourited = favouriteIds.includes(article.id);
+
+      return { ...article, favourited };
+    });
+
+    return { articles: articlesWithFavourites, articlesCount };
   }
 
   async createArticle(
