@@ -78,7 +78,6 @@ export class ArticleController {
       updateArticleDto,
       currentUserId,
     );
-    console.log('controler', article);
     return this.articleService.buildArticleResponse(article);
   }
 
