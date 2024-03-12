@@ -15,7 +15,6 @@ export class ArticleService {
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(ArticleEntity)
     private readonly articleRepository: Repository<ArticleEntity>,
-
     private dataSource: DataSource,
   ) {}
 

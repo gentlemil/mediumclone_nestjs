@@ -288,7 +288,7 @@ Returns most recent articles globally by default, provide tag, author or favorit
 
 Query Parameters:
 
-````bash
+```bash
 Filter by tag: `?tag=AngularJS`
 Filter by author: `?author=jake`
 Favorited by user: `?favorited=jake`
@@ -299,6 +299,7 @@ Offset/skip number of articles (default is 0): `?offset=0`
 Authentication optional, will return multiple articles, ordered by most recent first
 
 **11. Favorite Article:**
+
 ```bash
 POST /api/articles/:slug/favorite
 ```
@@ -307,20 +308,45 @@ Authentication required, returns the Article
 No additional parameters required
 
 **12. Unfavorite Article:**
+
 ```bash
 DELETE /api/articles/:slug/favorite
-bash
+```
 
 Authentication required, returns the Article
 No additional parameters required
 
-**13. :**
+**13. Get Profile:**
+
+```bash
+GET /api/profiles/:username
+```
+
+Authentication optional, returns a Profile
+
+**14. Follow user:**
+
+```bash
+POST /api/profiles/:username/follow
+```
+
+Authentication required, returns a Profile
+No additional parameters required
+
+**15. Unfollow user:**
+
+```bash
+DELETE /api/profiles/:username/follow
+```
+
+Authentication required, returns a Profile
+No additional parameters required
 
 **x. Get Tags:**
 
 ```bash
 GET /api/tags
-````
+```
 
 No authentication required, returns a List of Tags
 
