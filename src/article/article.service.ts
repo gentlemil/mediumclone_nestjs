@@ -23,14 +23,14 @@ export class ArticleService {
     currentUserId: number,
     query: any,
   ): Promise<ArticlesResponseInterface> {
-    const queryBuilding = this.dataSource
+    const queryBuilder = this.dataSource
       .getRepository(ArticleEntity)
       .createQueryBuilder('articles')
       .leftJoinAndSelect('articles.author', 'author');
 
     // find feeds by tag
     if (query.tag) {
-      queryBuilding.andWhere('articles.tagList LIKE :tag', {
+      queryBuilder.andWhere('articles.tagList LIKE :tag', {
         tag: `%${query.tag}%`,
       });
     }
@@ -40,27 +40,44 @@ export class ArticleService {
       const author = await this.userRepository.findOne({
         where: { username: query.author },
       });
-      queryBuilding.andWhere('articles.authorId = :id', {
+      queryBuilder.andWhere('articles.authorId = :id', {
         id: author.id,
       });
     }
 
-    // display articles from the newest
-    queryBuilding.orderBy('articles.createdAt', 'DESC');
+    // find user favourites articles
+    if (query.favourited) {
+      const author = await this.userRepository.findOne({
+        where: { username: query.favourited },
+        relations: ['favourites'],
+      });
 
-    const articlesCount = await queryBuilding.getCount();
+      const ids = author?.favourites.map((article) => article.id) || [];
+
+      if (ids.length > 0) {
+        queryBuilder.andWhere('articles.id IN (:...ids)', { ids });
+      } else {
+        // return empty array
+        queryBuilder.andWhere('1=0');
+      }
+    }
+
+    // display articles from the newest
+    queryBuilder.orderBy('articles.createdAt', 'DESC');
+
+    const articlesCount = await queryBuilder.getCount();
 
     // set how many elements provide per page
     if (query.limit) {
-      queryBuilding.limit(query.limit);
+      queryBuilder.limit(query.limit);
     }
 
     // set how mamy elements skip (page)
     if (query.offset) {
-      queryBuilding.offset(query.offset);
+      queryBuilder.offset(query.offset);
     }
 
-    const articles = await queryBuilding.getMany();
+    const articles = await queryBuilder.getMany();
 
     return { articles, articlesCount };
   }
