@@ -7,23 +7,57 @@
 
 <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
 
-## Installation and running the app
-
-```bash
-
-$ git clone https://github.com/gentlemil/mediumclone_nestjs.git
-
-$ npm install
-
-# development
-$ npm run start
-
-```
-
 ## Description
 
-In progress...
-Until then for more information click here: https://realworld-docs.netlify.app/docs/intro
+MVC _(Model-View-Controller)_ backend application that is a clone of **Medium.com**
+
+## Installation and running the app
+
+Clone the repository:
+
+```bash
+$ git clone https://github.com/gentlemil/mediumclone_nestjs.git
+```
+
+Switch to the repo folder:
+
+```bash
+cd mediumclone_nestjs
+```
+
+Install dependencies:
+
+```bash
+$ npm install
+```
+
+Run the application:
+
+```bash
+$ npm run start
+```
+
+Test api with `http://localhost:3000` in your favourite browser.
+
+## Database
+
+The database I use is **Postgresql** _(docs: https://www.postgresql.org/)_ and **TypeORM** _(docs: https://typeorm.io/)_ to host it in NestJS.
+
+Create a new database locally on the device you're using _(e.g. 'mediumclone')_ , and then pass references to it in a file _ormconfig.ts_
+
+```bash
+const config: PostgresConnectionOptions = {
+type: 'postgres',
+host: 'localhost',
+port: 5432,
+username: <db_username_name>,
+password: <db_password>,
+database: <db_name>,
+entities: [__dirname + '/**/*.entity{.ts,.js}'],
+synchronization: false,
+migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
+};
+```
 
 ## API Documentation - Endpoints
 
