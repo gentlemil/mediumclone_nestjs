@@ -70,6 +70,41 @@ export class ProfileService {
     return { ...user, following: true };
   }
 
+  async unfollowProfile(
+    currentUserId: number,
+    profileUsername: string,
+  ): Promise<ProfileType> {
+    const user = await this.userRepository.findOne({
+      where: {
+        username: profileUsername,
+      },
+    });
+
+    if (!user) {
+      throw new HttpException(`Profile doesn't exist`, HttpStatus.NOT_FOUND);
+    }
+
+    if (user.id === currentUserId) {
+      throw new HttpException(
+        `Followe and Following can't be equal`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const follow = await this.followRepository.findOne({
+      where: {
+        followerId: currentUserId,
+        followingId: user.id,
+      },
+    });
+
+    if (follow) {
+      await this.followRepository.delete({ id: follow.id });
+    }
+
+    return { ...user, following: false };
+  }
+
   buildProfileResponse(profile: ProfileType): ProfileResponseInterface {
     delete profile.email;
     return { profile };
