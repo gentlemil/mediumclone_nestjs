@@ -10,12 +10,14 @@ import { ProfileService } from './profile.service';
 import { User } from '@app/user/decorators/user.decorator';
 import { ProfileResponseInterface } from './types/profileResponse.interface';
 import { AuthGuard } from '@app/user/guards/auth.guard';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('profiles')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @Get(':username')
+  @ApiOperation({ summary: 'Get user profile data.' })
   async getProfile(
     @User('id') currentUserId: number,
     @Param('username') profileUsername: string,
@@ -29,6 +31,7 @@ export class ProfileController {
 
   @Post(':username/follow')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Follow user (author).' })
   async followProfile(
     @User('id') currentUserId: number,
     @Param('username') profileUsername: string,
@@ -42,6 +45,7 @@ export class ProfileController {
 
   @Delete(':username/follow')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Unfollow user (author).' })
   async unfollowProfile(
     @User('id') currentUserId: number,
     @Param('username') profileUsername: string,

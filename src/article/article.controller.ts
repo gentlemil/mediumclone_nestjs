@@ -18,12 +18,14 @@ import { UserEntity } from '@app/user/user.entity';
 import { ArticleResponseInterface } from './types/articleResponse.interface';
 import { ArticlesResponseInterface } from './types/articlesResponse.interface';
 import { BackendValidationPipe } from '@app/shared/pipes/backendValidation.pipe';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('articles')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Get all articles.' })
   async findAll(
     @User('id') currentUserId: number,
     @Query() query: Promise<ArticlesResponseInterface>,
@@ -33,6 +35,7 @@ export class ArticleController {
 
   @Get('feed')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get all articles by followed authors.' })
   async getFeed(
     @User('id') currentUserId: number,
     @Query() query: any,
@@ -43,6 +46,7 @@ export class ArticleController {
   @Post()
   @UseGuards(AuthGuard)
   @UsePipes(new BackendValidationPipe())
+  @ApiOperation({ summary: 'Create new article.' })
   async create(
     @User() currentUser: UserEntity,
     @Body('article') createArticleDto: CreateArticleDto,
@@ -56,6 +60,7 @@ export class ArticleController {
   }
 
   @Get(':slug')
+  @ApiOperation({ summary: 'Get single article.' })
   async getSingleArticle(
     @Param('slug') slug: string,
   ): Promise<ArticleResponseInterface> {
@@ -65,6 +70,7 @@ export class ArticleController {
 
   @Delete(':slug')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Delete article.' })
   async deleteArticle(
     @User('id') currentUserId: number,
     @Param('slug') slug: string,
@@ -75,6 +81,7 @@ export class ArticleController {
   @Put(':slug')
   @UseGuards(AuthGuard)
   @UsePipes(new BackendValidationPipe())
+  @ApiOperation({ summary: 'Delete article.' })
   async updateArticle(
     @User('id') currentUserId: number,
     @Param('slug') slug: string,
@@ -92,6 +99,7 @@ export class ArticleController {
 
   @Post(':slug/favourite')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Mark article as user favourite.' })
   async addArticleToFavourites(
     @User('id') currentUserId: number,
     @Param('slug') slug: string,
@@ -105,6 +113,7 @@ export class ArticleController {
 
   @Delete(':slug/favourite')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Unmark article as user favourite.' })
   async deleteArticleFromFavourites(
     @User('id') currentUserId: number,
     @Param('slug') slug: string,
