@@ -7,6 +7,7 @@ import { DataSource, DeleteResult, Repository } from 'typeorm';
 import { ArticleResponseInterface } from './types/articleResponse.interface';
 import slugify from 'slugify';
 import { ArticlesResponseInterface } from './types/articlesResponse.interface';
+import { FollowEntity } from '@app/profile/follow.entity';
 
 @Injectable()
 export class ArticleService {
@@ -16,6 +17,8 @@ export class ArticleService {
     @InjectRepository(ArticleEntity)
     private readonly articleRepository: Repository<ArticleEntity>,
     private dataSource: DataSource,
+    @InjectRepository(FollowEntity)
+    private readonly followRepository: Repository<FollowEntity>,
   ) {}
 
   async findAll(
@@ -97,6 +100,56 @@ export class ArticleService {
     });
 
     return { articles: articlesWithFavourites, articlesCount };
+  }
+
+  async getFeed(
+    currentUserId: number,
+    query: any,
+  ): Promise<ArticlesResponseInterface> {
+    // find all users observed by the logged-in user
+    // .find() show all records, but we need to filter them by currentUserId
+    // so we user { where: { followerId: currentUserId } }
+    const follows = await this.followRepository.find({
+      where: {
+        followerId: currentUserId,
+      },
+    });
+
+    // follows = [] means that current user doesn't follow anyone
+    if (follows.length === 0) {
+      return { articles: [], articlesCount: 0 };
+    }
+
+    const followingUserIds: number[] = follows.map(
+      (follow: FollowEntity) => follow.followingId,
+    );
+    console.log(followingUserIds);
+
+    const queryBuilder = this.dataSource
+      .getRepository(ArticleEntity)
+      .createQueryBuilder('articles')
+      .leftJoinAndSelect('articles.author', 'author')
+      .where('articles.authorId IN (:...ids', { ids: followingUserIds });
+
+    // order feeds from the newest
+    queryBuilder.orderBy('articles.createdAt', 'DESC');
+
+    // count all articles
+    const articlesCount = await queryBuilder.getCount();
+
+    // display specific amount of articles per page
+    if (query.limit) {
+      queryBuilder.limit(query.limit);
+    }
+
+    // display specific page
+    if (query.offset) {
+      queryBuilder.limit(query.offset);
+    }
+
+    const articles = await queryBuilder.getMany();
+
+    return { articles, articlesCount };
   }
 
   async createArticle(
