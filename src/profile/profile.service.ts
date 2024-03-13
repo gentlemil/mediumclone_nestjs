@@ -91,6 +91,11 @@ export class ProfileService {
       );
     }
 
+    await this.followRepository.delete({
+      followerId: currentUserId,
+      followingId: user.id,
+    });
+
     const follow = await this.followRepository.findOne({
       where: {
         followerId: currentUserId,
@@ -98,11 +103,7 @@ export class ProfileService {
       },
     });
 
-    if (follow) {
-      await this.followRepository.delete({ id: follow.id });
-    }
-
-    return { ...user, following: false };
+    return { ...user, following: Boolean(follow) };
   }
 
   buildProfileResponse(profile: ProfileType): ProfileResponseInterface {
