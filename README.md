@@ -38,6 +38,7 @@ $ npm run start
 ```
 
 Test api with `http://localhost:3000` in your favourite browser.
+Swagger `http://localhost:3000/api`.
 
 ## Database
 
@@ -443,6 +444,59 @@ Response format:
   ]
 }
 ```
+
+**18. Create comment:**
+
+```bash
+GET /api/articles/:slug/comments/add
+```
+
+Example request body:
+
+```bash
+{
+  "comment": {
+    "content": "My first comment."
+  }
+}
+```
+
+Authentication required, returns created comment
+All fields required
+
+Response format:
+
+```bash
+{
+  "comment": {}
+}
+```
+
+**19. Get comments:**
+
+```bash
+GET /api/articles/:slug/comments/
+```
+
+No authentication required, returns comments related to the article
+
+Response format:
+
+```bash
+{
+  "comments": [],
+  "commentsCounts": 0
+}
+
+```
+
+**20. Delete comment:**
+
+```bash
+GET /api/articles/:slug/comments/:id
+```
+
+Authentication required.
 
 ## Error Handling
 
