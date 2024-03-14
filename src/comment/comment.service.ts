@@ -1,7 +1,7 @@
 import { CommentResponseInterface } from '@app/comment/types/commentResponse.interface';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, DeleteResult, Repository } from 'typeorm';
 import { CommentEntity } from './comment.entity';
 import { CreateCommentDto } from './dto/createComment.dto';
 import { ArticleService } from '@app/article/article.service';
@@ -47,8 +47,6 @@ export class CommentService {
       comment.user = user;
       comment.article = article;
 
-      console.log(comment);
-
       await this.commentRepository.save(comment);
 
       return comment;
@@ -76,6 +74,34 @@ export class CommentService {
     const commentsCount = await queryBuilder.getCount();
 
     return this.buildCommentsResponse(comments, commentsCount);
+  }
+
+  async deleteComment(
+    currentUserId: number,
+    slug: string,
+    commentId: number,
+  ): Promise<DeleteResult> {
+    // check if comment with provided id exist, throw error if not
+    const comment = await this.dataSource
+      .getRepository(CommentEntity)
+      .createQueryBuilder('comment')
+      .leftJoinAndSelect('comment.user', 'user')
+      .where('comment.id = :commentId', { commentId: commentId })
+      .getOne();
+
+    if (!comment) {
+      throw new HttpException(`Comment doesn't exist`, HttpStatus.NOT_FOUND);
+    }
+
+    // check if currentUserId is equal to the comment author, throw error if not
+    if (Number(comment.user.id) !== Number(currentUserId)) {
+      throw new HttpException(
+        `Comment doesn't belong to user`,
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    return this.commentRepository.delete({ id: commentId });
   }
 
   buildCommentResponse(comment: CommentEntity): CommentResponseInterface {

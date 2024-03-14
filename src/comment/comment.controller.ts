@@ -5,6 +5,7 @@ import { AuthGuard } from '@app/user/guards/auth.guard';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -14,11 +15,13 @@ import {
 import { CreateCommentDto } from './dto/createComment.dto';
 import { CommentService } from './comment.service';
 import { UserEntity } from '@app/user/user.entity';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller()
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
+  @ApiOperation({ summary: 'Add comment to the article' })
   @Post('articles/:slug/comments/add')
   @UseGuards(AuthGuard)
   @UsePipes(new BackendValidationPipe())
@@ -36,8 +39,28 @@ export class CommentController {
     return this.commentService.buildCommentResponse(comment);
   }
 
+  @ApiOperation({ summary: 'Get all comments related to the article' })
   @Get('articles/:slug/comments')
   async getComments(@Param('slug') slug: string) {
     return await this.commentService.getComments(slug);
   }
+
+  @ApiOperation({ summary: 'Delete the comment' })
+  @Delete('articles/:slug/comments/:id')
+  @UseGuards(AuthGuard)
+  async deleteArticle(
+    @User('id') currentUserId: number,
+    @Param('slug') slug: string,
+    @Param('id') commentId: number,
+  ): Promise<any> {
+    return await this.commentService.deleteComment(
+      currentUserId,
+      slug,
+      commentId,
+    );
+  }
+
+  // TODO: updateComment (if belongs to user who created)
+  // TODO: like or dislike comment?
+  // TODO: sort by newest (created) or most popular
 }
