@@ -16,9 +16,9 @@ export class ArticleService {
     private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(ArticleEntity)
     private readonly articleRepository: Repository<ArticleEntity>,
-    private dataSource: DataSource,
     @InjectRepository(FollowEntity)
     private readonly followRepository: Repository<FollowEntity>,
+    private dataSource: DataSource,
   ) {}
 
   async findAll(
@@ -123,7 +123,6 @@ export class ArticleService {
     const followingUserIds: number[] = follows.map(
       (follow: FollowEntity) => follow.followingId,
     );
-    console.log(followingUserIds);
 
     const queryBuilder = this.dataSource
       .getRepository(ArticleEntity)
@@ -157,6 +156,7 @@ export class ArticleService {
     createArticleDto: CreateArticleDto,
   ): Promise<ArticleEntity> {
     const article = new ArticleEntity();
+
     Object.assign(article, createArticleDto);
     if (!article.tagList) {
       article.tagList = [];

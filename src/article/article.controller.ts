@@ -25,7 +25,9 @@ export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all articles.' })
+  @ApiOperation({
+    summary: 'Gets all articles, by default from the newest order',
+  })
   async findAll(
     @User('id') currentUserId: number,
     @Query() query: Promise<ArticlesResponseInterface>,
