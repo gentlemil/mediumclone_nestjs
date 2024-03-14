@@ -5,6 +5,7 @@ import { AuthGuard } from '@app/user/guards/auth.guard';
 import {
   Body,
   Controller,
+  Get,
   Param,
   Post,
   UseGuards,
@@ -12,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { CreateCommentDto } from './dto/createComment.dto';
 import { CommentService } from './comment.service';
+import { UserEntity } from '@app/user/user.entity';
 
 @Controller()
 export class CommentController {
@@ -21,16 +23,21 @@ export class CommentController {
   @UseGuards(AuthGuard)
   @UsePipes(new BackendValidationPipe())
   async createComment(
-    @User('id') currentUserId: number,
+    @User() currentUser: UserEntity,
     @Param('slug') slug: string,
     @Body('comment') createCommentDto: CreateCommentDto,
   ): Promise<CommentResponseInterface> {
     const comment = await this.commentService.createComment(
-      currentUserId,
+      currentUser,
       slug,
       createCommentDto,
     );
 
     return this.commentService.buildCommentResponse(comment);
+  }
+
+  @Get('articles/:slug/comments')
+  async getComments(@Param('slug') slug: string) {
+    return await this.commentService.getComments(slug);
   }
 }

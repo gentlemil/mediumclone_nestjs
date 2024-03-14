@@ -86,7 +86,7 @@ export class ProfileService {
 
     if (user.id === currentUserId) {
       throw new HttpException(
-        `Followe and Following can't be equal`,
+        `Follower and Following can't be equal`,
         HttpStatus.BAD_REQUEST,
       );
     }
