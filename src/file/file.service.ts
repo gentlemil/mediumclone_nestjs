@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import FileEntity from './file.entity';
 import { Repository } from 'typeorm';
+import { FilesResponseInterface } from './types/filesResponse.interface';
 
 @Injectable()
 export class FileService {
@@ -9,6 +10,12 @@ export class FileService {
     @InjectRepository(FileEntity)
     private readonly fileRepository: Repository<FileEntity>,
   ) {}
+
+  async findAll(): Promise<FilesResponseInterface> {
+    const files = await this.fileRepository.find();
+    const filesCount = files.length;
+    return { files, filesCount };
+  }
 
   async uploadFile(dataBuffer: Buffer, filename: string) {
     const newFile = await this.fileRepository.create({
@@ -27,7 +34,7 @@ export class FileService {
     });
 
     if (!file) {
-      throw new NotFoundException();
+      throw new HttpException(`File doesn't exist`, HttpStatus.NOT_FOUND);
     }
 
     return file;

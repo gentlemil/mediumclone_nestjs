@@ -74,9 +74,10 @@ export class UserService {
         'email or password': 'is invalid',
       },
     };
+
     const user = await this.userRepository.findOne({
       where: { email: loginUserDto.email },
-      select: ['id', 'username', 'email', 'bio', 'avatar', 'password'],
+      select: ['id', 'username', 'email', 'bio', 'avatarId', 'password'],
     });
 
     if (!user) {
@@ -98,6 +99,7 @@ export class UserService {
     return user;
   }
 
+  // TODO: update user avatar (remove and upload again)
   async updateUser(
     userId: number,
     updateUserDto: UpdateUserDto,

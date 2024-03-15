@@ -17,6 +17,12 @@ import { Response } from 'express';
 export class FileController {
   constructor(private readonly fileService: FileService) {}
 
+  // TODO: create roles and add authentication (only for superadmin)
+  @Get()
+  async findAll() {
+    return await this.fileService.findAll();
+  }
+
   @Get(':id')
   async getFileById(
     @Param('id', ParseIntPipe) id: number,
