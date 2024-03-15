@@ -9,12 +9,27 @@ import { UserResponseInterface } from './types/userResponse.interface';
 import { compare } from 'bcrypt';
 import { LoginUserDto } from './dto/loginUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
+import { FileService } from '@app/file/file.service';
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private readonly fileService: FileService,
   ) {}
+
+  async addAvatar(
+    currentUserId: number,
+    imageBuffer: Buffer,
+    filename: string,
+  ) {
+    const avatar = await this.fileService.uploadFile(imageBuffer, filename);
+
+    await this.userRepository.update(currentUserId, {
+      avatarId: avatar.id,
+    });
+    return avatar;
+  }
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     const errorResponse = {
@@ -59,9 +74,10 @@ export class UserService {
         'email or password': 'is invalid',
       },
     };
+
     const user = await this.userRepository.findOne({
       where: { email: loginUserDto.email },
-      select: ['id', 'username', 'email', 'bio', 'image', 'password'],
+      select: ['id', 'username', 'email', 'bio', 'avatarId', 'password'],
     });
 
     if (!user) {
@@ -83,6 +99,7 @@ export class UserService {
     return user;
   }
 
+  // TODO: update user avatar (remove and upload again)
   async updateUser(
     userId: number,
     updateUserDto: UpdateUserDto,
