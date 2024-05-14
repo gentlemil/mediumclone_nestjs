@@ -30,8 +30,8 @@ export class ArticleController {
   })
   async findAll(
     @User('id') currentUserId: number,
-    @Query() query: Promise<ArticlesResponseInterface>,
-  ) {
+    @Query() query: any,
+  ): Promise<ArticlesResponseInterface> {
     return await this.articleService.findAll(currentUserId, query);
   }
 
@@ -89,8 +89,6 @@ export class ArticleController {
     @Param('slug') slug: string,
     @Body('article') updateArticleDto: CreateArticleDto,
   ): Promise<ArticleResponseInterface> {
-    console.log('BODY', updateArticleDto);
-
     const article = await this.articleService.updateArticle(
       slug,
       updateArticleDto,
